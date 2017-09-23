@@ -1,6 +1,9 @@
 {
   "extends": "airbnb",
   "parser": "babel-eslint",
+  "env": {
+    "browser": true
+  },
   "parserOptions": {
     "ecmaVersion": 6
   },
@@ -8,7 +11,7 @@
     "react/prop-types": [
       2,
       {
-        "skipUndeclared": true
+        "skipUndeclared": false
       }
     ],
     "react/jsx-filename-extension": 0,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Intro } from './components/Intro';
+import { Task } from './components/Task';
 import logo from './logo.svg';
 import './App.css';
 
@@ -8,8 +9,7 @@ function fetchHabiticaTasks() {
     'x-api-key': '9ca67b5a-4f72-4200-81c8-345c534e6234',
     'x-api-user': 'c4484f97-e965-4748-8a09-467270680338',
   };
-  console.log(headers);
-  return fetch('https://habitica.com/api/v3/tasks/user', { headers });
+  return fetch('https://habitica.com/api/v3/tasks/user?type=todos', { headers });
 }
 
 class App extends Component {
@@ -17,6 +17,7 @@ class App extends Component {
     super(props);
     this.state = {
       dataSize: 0,
+      tasks: [],
     };
   }
 
@@ -27,12 +28,21 @@ class App extends Component {
       )
       .then(
         (res) => {
-          console.log(res);
           this.setState({
             dataSize: res.data.length,
+            tasks: res.data,
           });
         },
       );
+  }
+
+  renderTask() {
+    if (this.state.dataSize > 0) {
+      return (
+        <Task task={this.state.tasks[0]} />
+      );
+    }
+    return null;
   }
 
   render() {
@@ -43,8 +53,9 @@ class App extends Component {
           <h2>Welcome to React, Lisa!</h2>
         </div>
         <p className="App-intro">
-          Size of my data is {this.state.dataSize};
+          The size of my data is {this.state.dataSize};
         </p>
+        {this.renderTask()}
         <Intro name="Zsa-Zsa" secondName="Tiba" />
       </div>
     );
