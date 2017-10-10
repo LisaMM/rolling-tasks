@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Intro } from './components/Intro';
 import { Task } from './components/Task';
-import logo from './logo.svg';
 import './App.css';
 
 function fetchHabiticaTasks() {
@@ -10,6 +8,13 @@ function fetchHabiticaTasks() {
     'x-api-user': 'c4484f97-e965-4748-8a09-467270680338',
   };
   return fetch('https://habitica.com/api/v3/tasks/user?type=todos', { headers });
+}
+
+function sortTasks(tasks = []) {
+  return tasks.sort((a, b) => (
+    new Date(a.date || '2020-01-01T01:00:00.000Z').getTime()
+    - new Date(b.date || '2020-01-01T01:00:00.000Z').getTime()
+  ));
 }
 
 class App extends Component {
@@ -30,7 +35,7 @@ class App extends Component {
         (res) => {
           this.setState({
             dataSize: res.data.length,
-            tasks: res.data,
+            tasks: sortTasks(res.data),
           });
         },
       );
@@ -48,15 +53,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React, Lisa!</h2>
-        </div>
         <p className="App-intro">
-          The size of my data is {this.state.dataSize};
+          I have {this.state.dataSize} tasks.
         </p>
         {this.renderTask()}
-        <Intro name="Zsa-Zsa" secondName="Tiba" />
       </div>
     );
   }

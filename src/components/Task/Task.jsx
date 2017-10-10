@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { ChecklistItem } from './../ChecklistItem';
 
 export default class Task extends Component {
   static propTypes = {
@@ -15,6 +16,13 @@ export default class Task extends Component {
 
         <div>
           {task.notes}
+        </div>
+        <div>
+          <ul>
+            {task.checklist.map(c => (
+              <ChecklistItem key={c.id} text={c.text} />
+            ))}
+          </ul>
         </div>
       </div>
     );
