@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Task } from './components/Task';
+import { Button } from './components/Button';
 import './App.css';
 
 function fetchHabiticaTasks() {
@@ -18,11 +19,22 @@ function sortTasks(tasks = []) {
 }
 
 class App extends Component {
+  handleNextButtonClick = (name) => {
+    const newDoneIds = [...this.state.doneIds, this.state.activeTaskId];
+    const newTask = this.state.tasks.find(task => newDoneIds.indexOf(task.id) === -1);
+
+    this.setState({
+      doneIds: newDoneIds,
+      activeTaskId: newTask.id,
+    });
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      dataSize: 0,
       tasks: [],
+      doneIds: [],
+      activeTaskId: null,
     };
   }
 
@@ -33,30 +45,49 @@ class App extends Component {
       )
       .then(
         (res) => {
+          const sortedTasks = sortTasks(res.data);
+          const firstTask = sortedTasks
+              .find(task => this.state.doneIds.forEach(id => id === task.id))
+            || sortedTasks[0];
           this.setState({
-            dataSize: res.data.length,
-            tasks: sortTasks(res.data),
+            tasks: sortedTasks,
+            activeTaskId: firstTask.id,
           });
         },
       );
   }
 
-  renderTask() {
-    if (this.state.dataSize > 0) {
-      return (
-        <Task task={this.state.tasks[0]} />
-      );
-    }
-    return null;
+  renderFirstContainer() {
+    const firstTask = this.state.tasks
+      .find(task => task.id === this.state.activeTaskId);
+    return (
+      <div>
+        <Task task={firstTask} />
+        <div className="App-actions">
+          <Button name="Next" onButtonClick={this.handleNextButtonClick} />
+        </div>
+      </div>
+    );
+  }
+
+  renderDoneContainer() {
+    return (
+      <div>
+        This will be the done list.
+        {this.state.doneIds}
+        {this.state.activeTaskId}
+      </div>
+    );
   }
 
   render() {
     return (
       <div className="App">
         <p className="App-intro">
-          I have {this.state.dataSize} tasks.
+          I have {this.state.tasks.length} tasks.
         </p>
-        {this.renderTask()}
+        {this.state.tasks.length > 0 ? this.renderFirstContainer() : 'Loading'}
+        {this.renderDoneContainer()}
       </div>
     );
   }
