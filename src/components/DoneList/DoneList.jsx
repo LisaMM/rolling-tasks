@@ -15,7 +15,7 @@ export default class DoneList extends Component {
       <div>
         <ul>
           {doneTasks.map(dt => (
-            <ChecklistItem key={dt.id} text={dt.text} />
+            <ChecklistItem key={dt.id} text={dt.text} done={false} />
           ))}
         </ul>
       </div>

@@ -20,7 +20,7 @@ export default class Task extends Component {
         <div>
           <ul>
             {task.checklist.map(c => (
-              <ChecklistItem key={c.id} text={c.text} />
+              <ChecklistItem key={c.id} text={c.text} done={c.completed} />
             ))}
           </ul>
         </div>
