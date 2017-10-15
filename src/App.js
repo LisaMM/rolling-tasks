@@ -9,14 +9,19 @@ function fetchHabiticaTasks() {
     'x-api-key': '9ca67b5a-4f72-4200-81c8-345c534e6234',
     'x-api-user': 'c4484f97-e965-4748-8a09-467270680338',
   };
-  return fetch('https://habitica.com/api/v3/tasks/user?type=todos', { headers });
+  return fetch('https://habitica.com/api/v3/tasks/user', { headers });
 }
 
 function sortTasks(tasks = []) {
-  return tasks.sort((a, b) => (
-    new Date(a.date || '2020-01-01T01:00:00.000Z').getTime()
-    - new Date(b.date || '2020-01-01T01:00:00.000Z').getTime()
-  ));
+  return tasks.filter(t => (
+    t.type === 'todo' || (t.type === 'daily' && t.isDue === true && t.completed === false)
+  )).sort((a, b) => {
+    const aDate = a.type === 'daily' ? new Date() : new Date(a.date || '2020-01-01T01:00:00.000Z');
+    const bDate = b.type === 'daily' ? new Date() : new Date(b.date || '2020-01-01T01:00:00.000Z');
+    return (
+      aDate.getTime() - bDate.getTime()
+    );
+  });
 }
 
 class App extends Component {
