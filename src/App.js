@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Task } from './components/Task';
 import { Button } from './components/Button';
+import { DoneList } from './components/DoneList';
 import './App.css';
 
 function fetchHabiticaTasks() {
@@ -19,16 +20,6 @@ function sortTasks(tasks = []) {
 }
 
 class App extends Component {
-  handleNextButtonClick = (name) => {
-    const newDoneIds = [...this.state.doneIds, this.state.activeTaskId];
-    const newTask = this.state.tasks.find(task => newDoneIds.indexOf(task.id) === -1);
-
-    this.setState({
-      doneIds: newDoneIds,
-      activeTaskId: newTask.id,
-    });
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -37,6 +28,16 @@ class App extends Component {
       activeTaskId: null,
     };
   }
+
+  handleNextButtonClick = () => {
+    const newDoneIds = [...this.state.doneIds, this.state.activeTaskId];
+    const newTask = this.state.tasks.find(task => newDoneIds.indexOf(task.id) === -1);
+
+    this.setState({
+      doneIds: newDoneIds,
+      activeTaskId: newTask.id,
+    });
+  };
 
   componentWillMount() {
     fetchHabiticaTasks()
@@ -57,6 +58,10 @@ class App extends Component {
       );
   }
 
+  fetchTaskById(id) {
+    return this.state.tasks.find(task => task.id === id);
+  }
+
   renderFirstContainer() {
     const firstTask = this.state.tasks
       .find(task => task.id === this.state.activeTaskId);
@@ -71,11 +76,10 @@ class App extends Component {
   }
 
   renderDoneContainer() {
+    const doneTasks = this.state.doneIds.map(id => this.fetchTaskById(id));
     return (
       <div>
-        This will be the done list.
-        {this.state.doneIds}
-        {this.state.activeTaskId}
+        <DoneList doneTasks={doneTasks} />
       </div>
     );
   }
