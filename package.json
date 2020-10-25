@@ -5,10 +5,9 @@
   "dependencies": {
     "es6-promise": "^4.1.1",
     "eslint-config-airbnb": "^18.2.0",
-    "isomorphic-fetch": "^2.2.1",
     "prop-types": "^15.5.10",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "react-scripts": "3.4.4"
   },
   "scripts": {
